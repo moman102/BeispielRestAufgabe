@@ -1,0 +1,109 @@
+openapi: 3.0.2
+info:
+  description: |
+    This is a sample Patientenkartenverwaltung server.
+  version: 1.0.0
+  title: Patientenkartenverwaltung
+# host: petstore.swagger.io
+# basePath: /v2
+servers:
+  - url: 'http://localhost:8080'
+paths:
+  /patient:
+    post:
+      tags:
+        - Patient
+      summary: Legt ein Patient an.
+      requestBody:
+        $ref: '#/components/requestBodies/Patient'
+      responses:
+        201:
+          description: Created
+
+  /patient/all:
+    get:
+      tags:
+        - Patient
+      summary: Liste alle Patienten
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+
+  /patient/{versichertenNummer}:
+    parameters:
+      - name: versichertenNummer
+        in: path
+        required: true
+        schema:
+          type: string
+        description: versichertenNummer des Patienten
+    get:
+      tags:
+        - Patient
+      summary: Lefert ein Patient
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Patient'
+
+    put:
+      tags:
+        - Patient
+      summary: Ändert ein Patient
+      requestBody:
+        $ref: '#/components/requestBodies/Patient'
+      responses:
+        200:
+          description: Ok
+
+    delete:
+      tags:
+        - Patient
+      summary: Löscht ein Patient
+      responses:
+        200:
+          description: Ok
+
+
+components:
+  requestBodies:
+    Patient:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Patient'
+  schemas:
+    Patient:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "mustermann"
+        vorname:
+          type: string
+          example: "muster"
+        ablaufdatum:
+          type: string
+          pattern: /([0-9]{4})-(?:[0-9]{2})-([0-9]{2})/
+          example: "2025-05-17"
+        versichertennummer:
+          type: string
+          minLength: 10
+          maxLength: 10
+          example: "J123456789"
+        IK:
+          type: string
+          example: "AOK"
+        kassen name:
+          type: string
+          example: "Allgemeine Ortskrankenkasse"
